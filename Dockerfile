@@ -1,4 +1,4 @@
-FROM ruby:2.6.5-slim-stretch
+FROM ruby:2.6.10-slim-buster
 
 ARG UID=1000
 ARG GID=1000
@@ -8,7 +8,7 @@ RUN addgroup --system listed --gid $GID && adduser --disabled-password --system 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN apt-get update \
-    && apt-get install -y git build-essential libmariadb-dev curl imagemagick python \
+    && apt-get install -y git build-essential libmariadb-dev curl imagemagick python netcat \
     && apt-get -y autoclean
 
 RUN mkdir -p /usr/local/nvm
@@ -17,7 +17,7 @@ ENV NODE_VERSION 14.18.2
 ENV NVM_INSTALL_PATH $NVM_DIR/versions/node/v$NODE_VERSION
 ENV WEBPACKER_NODE_MODULES_BIN_PATH=value
 
-RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+RUN curl --silent --output - https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
 RUN source $NVM_DIR/nvm.sh \
    && nvm install $NODE_VERSION \
